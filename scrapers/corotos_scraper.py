@@ -198,10 +198,13 @@ class CorotosScraper(BaseScraper):
                 if not html_anuncio:
                     continue
                 propiedad = self._parsear_propiedad(html_anuncio)
+
                 if propiedad is not None:
                     propiedades.append(propiedad)
-                    print(f"[Corotos] {len(propiedades)}/{limite}: "
-                          f"{propiedad.nombre if hasattr(propiedad, 'nombre') else url}")
+
+                    print(f"\n[{self.nombre}] {len(propiedades)}/{limite}")
+                    print(f"Nombre: {propiedad.nombre}")
+                    print(f"URL: {url}")
 
             if len(propiedades) < limite:
                 time.sleep(self.PAUSA_SEGUNDOS)
