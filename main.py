@@ -23,11 +23,11 @@ from utils.reportes import EstatusScraping, Exportador
 # from scrapers.supercasas_scraper import SuperCasasScraper
 from scrapers.plusval_scraper import PlusvalScraper
 from scrapers.corotos_scraper import CorotosScraper
-
+from scrapers.supercasas_scraper import SuperCasasScraper
 SCRAPERS = [
     PlusvalScraper(),
     CorotosScraper(),
-    #SuperCasasScraper()
+    SuperCasasScraper()
 ]
 
 
