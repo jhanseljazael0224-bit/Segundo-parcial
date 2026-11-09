@@ -1,10 +1,3 @@
-"""Scraper educativo de inmuebles de Corotos (requests + BeautifulSoup).
-
-Interfaz compatible con el main.py del proyecto:
-    extraer(estatus, limite) -> list[Propiedad]
-
-El reporte de tiempos se alimenta mediante estatus.obtener_html_medido.
-"""
 
 import re
 import time
