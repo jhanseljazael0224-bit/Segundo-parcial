@@ -131,8 +131,8 @@ El programa ejecutará los scrapers habilitados en `main.py` y generará los rep
 |---|---|---|
 | Plusval | 200 propiedades | ✅ Implementado y probado |
 | Corotos | 200 propiedades | ✅ Implementado y probado |
-| SuperCasas | 200 propiedades | ⏳ Pendiente |
-| **Total** | **600 propiedades** | **En desarrollo** |
+| SuperCasas | 200 propiedades | ✅ Implementado y probado |
+| **Total** | **600 propiedades** | ✅ Implementado |
 
 ### Avances realizados
 
