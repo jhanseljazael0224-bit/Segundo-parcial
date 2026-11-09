@@ -1,7 +1,14 @@
+# Entornos virtuales
 .venv/
 venv/
+env/
+
+# Archivos temporales de Python
 __pycache__/
 *.pyc
-.vscode/
+
+# Resultados generados
 resultados/
-.env
+
+# Archivos del editor
+.vscode/
