@@ -62,7 +62,7 @@ Segundo-parcial/
 │   ├── base_scraper.py
 │   ├── plusval_scraper.py
 │   ├── corotos_scraper.py
-│   └── supercasas_scraper.py    # Pendiente
+│   └── supercasas_scraper.py
 │
 ├── models/
 │   └── propiedades.py
