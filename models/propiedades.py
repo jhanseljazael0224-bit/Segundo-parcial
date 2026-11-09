@@ -8,7 +8,7 @@ class Propiedad:
         precio,
         ubicacion,
         vendedor,
-        tamano,
+        tamaño,
         habitaciones,
         baños,
         parqueos
@@ -18,7 +18,7 @@ class Propiedad:
         self.precio = precio
         self.ubicacion = ubicacion
         self.vendedor = vendedor
-        self.tamano = tamano
+        self.tamaño = tamaño
         self.habitaciones = habitaciones
         self.baños = baños
         self.parqueos = parqueos
@@ -30,7 +30,7 @@ class Propiedad:
             "Precio": self.precio,
             "Ubicación": self.ubicacion,
             "Vendedor": self.vendedor,
-            "Tamaño": self.tamano,
+            "Tamaño": self.tamaño,
             "Número de habitaciones": self.habitaciones,
             "Número de baños": self.baños,
             "Número de parqueos": self.parqueos
