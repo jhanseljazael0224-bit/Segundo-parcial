@@ -61,7 +61,7 @@ Segundo-parcial/
 ├── scrapers/
 │   ├── base_scraper.py
 │   ├── plusval_scraper.py
-│   ├── corotos_scraper.py       # Pendiente
+│   ├── corotos_scraper.py
 │   └── supercasas_scraper.py    # Pendiente
 │
 ├── models/
@@ -130,7 +130,7 @@ El programa ejecutará los scrapers habilitados en `main.py` y generará los rep
 | Plataforma | Objetivo | Estado |
 |---|---|---|
 | Plusval | 200 propiedades | ✅ Implementado y probado |
-| Corotos | 200 propiedades | ⏳ Pendiente |
+| Corotos | 200 propiedades | ✅ Implementado y probado |
 | SuperCasas | 200 propiedades | ⏳ Pendiente |
 | **Total** | **600 propiedades** | **En desarrollo** |
 
