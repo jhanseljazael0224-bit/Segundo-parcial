@@ -21,11 +21,12 @@ from utils.reportes import EstatusScraping, Exportador
 # Cuando esten listos, se importan y se agregan aqui, por ejemplo:
 # from scrapers.corotos_scraper import CorotosScraper
 # from scrapers.supercasas_scraper import SuperCasasScraper
-# from scrapers.plusval_scraper import PlusvalScraper
+from scrapers.plusval_scraper import PlusvalScraper
+
 SCRAPERS = [
-    # CorotosScraper(),
-    # SuperCasasScraper(),
-    # PlusvalScraper(),
+    PlusvalScraper(),
+    #CorotosScraper(),
+    #SuperCasasScraper()
 ]
 
 
