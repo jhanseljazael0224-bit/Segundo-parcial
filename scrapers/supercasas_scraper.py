@@ -265,9 +265,13 @@ class SuperCasasScraper(BaseScraper):
                 propiedad = self._parsear_propiedad(
                     html_ficha, texto_enlace, texto_tarjeta
                 )
+
                 if propiedad is not None:
                     propiedades.append(propiedad)
-                    print(f"[SuperCasas] {len(propiedades)}/{limite}: {url}")
+
+                    print(f"\n[{self.nombre}] {len(propiedades)}/{limite}")
+                    print(f"Nombre: {propiedad.nombre}")
+                    print(f"URL: {url}")
 
         print(f"[SuperCasas] Total: {len(propiedades)} de {limite}.")
         return propiedades
