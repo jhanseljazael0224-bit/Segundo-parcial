@@ -9,8 +9,6 @@ from urllib.parse import (
     urlencode
 )
 
-import requests
-
 from scrapers.base_scraper import BaseScraper
 from models.propiedades import Propiedad
 
@@ -129,20 +127,22 @@ class PlusvalScraper(BaseScraper):
         ))
 
     # Obtener los asesores inmobiliarios de una propiedad
-    def obtener_vendedores(self, enlace):
-        try:
-            respuesta = self.session.get(
-                enlace,
-                timeout=30
-            )
+    # Ahora registra el tiempo de cada solicitud
+    def obtener_vendedores(self, enlace, estatus):
 
-            respuesta.raise_for_status()
+        html = estatus.obtener_html_medido(
+            self,
+            enlace
+        )
 
-        except requests.RequestException as error:
-            print("Error al consultar vendedor:", error)
+        if not html:
+            print("No se pudo consultar el vendedor.")
             return None
 
-        soup = self.analizar_html(respuesta.text)
+        soup = self.analizar_html(html)
+
+        if soup is None:
+            return None
 
         etiquetas = soup.select(
             ".associates .agent-preview .agent-information h6"
@@ -161,19 +161,32 @@ class PlusvalScraper(BaseScraper):
 
         return None
 
-    # Extraer las propiedades de varias páginas
-    def obtener_propiedades(self, limite=200):
+    # Extraer propiedades de varias páginas
+    # Método compatible con el main.py del equipo
+    def extraer(self, estatus, limite=200):
 
         if limite <= 0:
             return []
 
-        html = self.obtener_html()
+        # Guardamos la URL inicial de Plusval
+        url_inicio = (
+            "https://plusval.com.do/apartamentos/venta"
+        )
+
+        # Primera solicitud, con medición de tiempo
+        html = estatus.obtener_html_medido(
+            self,
+            url_inicio
+        )
 
         if not html:
             print("No se pudo descargar Plusval.")
             return []
 
         soup = self.analizar_html(html)
+
+        if soup is None:
+            return []
 
         enlace_busqueda = None
 
@@ -191,7 +204,7 @@ class PlusvalScraper(BaseScraper):
             return []
 
         url_base = urljoin(
-            self.url,
+            url_inicio,
             enlace_busqueda
         )
 
@@ -215,25 +228,28 @@ class PlusvalScraper(BaseScraper):
 
             inicio = time.perf_counter()
 
-            try:
-                respuesta = self.session.get(
-                    url,
-                    timeout=30
-                )
-
-                respuesta.raise_for_status()
-
-            except requests.RequestException as error:
-                print("Error de conexión:", error)
-                break
+            # Solicitud registrada por EstatusScraping
+            html_pagina = estatus.obtener_html_medido(
+                self,
+                url
+            )
 
             duracion = time.perf_counter() - inicio
 
+            if not html_pagina:
+                print("Error de conexión.")
+                break
+
             soup_pagina = self.analizar_html(
-                respuesta.text
+                html_pagina
             )
 
-            tarjetas = soup_pagina.select("a.property")
+            if soup_pagina is None:
+                break
+
+            tarjetas = soup_pagina.select(
+                "a.property"
+            )
 
             nuevas = 0
 
@@ -248,11 +264,11 @@ class PlusvalScraper(BaseScraper):
                     continue
 
                 enlace_completo = urljoin(
-                    respuesta.url,
+                    url,
                     enlace
                 )
 
-                # Evitar duplicados
+                # Evitar propiedades duplicadas
                 if enlace_completo in enlaces_vistos:
                     continue
 
@@ -263,12 +279,13 @@ class PlusvalScraper(BaseScraper):
                 if propiedad is None:
                     continue
 
-                # Consultar los asesores inmobiliarios
+                # Consultar vendedores con medición
                 propiedad.vendedor = self.obtener_vendedores(
-                    enlace_completo
+                    enlace_completo,
+                    estatus
                 )
 
-                # Guardar una sola vez
+                # Guardar propiedad una sola vez
                 enlaces_vistos.add(enlace_completo)
                 propiedades.append(propiedad)
 
@@ -279,11 +296,11 @@ class PlusvalScraper(BaseScraper):
                     f"{propiedad.nombre[:45]}"
                 )
 
-                # Detener al alcanzar el límite
+                # Detenerse al alcanzar el límite
                 if len(propiedades) >= limite:
                     break
 
-                # Pausa entre solicitudes de detalles
+                # Pausa entre solicitudes
                 time.sleep(2)
 
             print(
@@ -302,7 +319,9 @@ class PlusvalScraper(BaseScraper):
             if len(propiedades) < limite:
                 time.sleep(2)
 
-        duracion_total = time.perf_counter() - inicio_total
+        duracion_total = (
+            time.perf_counter() - inicio_total
+        )
 
         print("\n=== RESULTADO FINAL ===")
         print("Total de propiedades:", len(propiedades))
@@ -311,5 +330,22 @@ class PlusvalScraper(BaseScraper):
             round(duracion_total, 2),
             "segundos"
         )
+
+        return propiedades
+
+    # Mantener compatibilidad con nuestras pruebas anteriores
+    def obtener_propiedades(self, limite=200):
+
+        from utils.reportes import EstatusScraping
+
+        estatus = EstatusScraping([])
+        estatus.iniciar()
+
+        propiedades = self.extraer(
+            estatus,
+            limite
+        )
+
+        estatus.finalizar()
 
         return propiedades
