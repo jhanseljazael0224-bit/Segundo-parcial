@@ -1,4 +1,4 @@
-
+"""Prueba rápida del scraper de Corotos antes de activar main.py."""
 from pathlib import Path
 
 from scrapers.corotos_scraper import CorotosScraper
